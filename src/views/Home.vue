@@ -1,18 +1,55 @@
 <template>
   <div>
-    <div v-if="!loading">
-      <Calendar :events="events"></Calendar>
-    </div>
-    <div v-else>LOADING...</div>
+    <v-container>
+      <v-row>
+        <v-col>
+          <div v-if="!loading">
+            <Calendar :events="events"></Calendar>
+          </div>
+          <div v-else>
+            <v-sheet :color="`grey lighten-4`">
+              <v-boilerplate
+                type="table"
+                class="mb-6"
+                :boilerplate="false"
+              ></v-boilerplate>
+            </v-sheet>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import Calendar from "@/components/Calendar";
+import { VSkeletonLoader } from "vuetify/lib";
 export default {
   components: {
-    Calendar
+    Calendar,
+    // eslint-disable-next-line vue/no-unused-components
+    VSkeletonLoader,
+    // Create a new component that
+    // extends v-skeleton-loader
+    // eslint-disable-next-line vue/no-unused-components
+    VBoilerplate: {
+      functional: true,
+      render(h, { data, props, children }) {
+        return h(
+          "VSkeletonLoader",
+          {
+            ...data,
+            props: {
+              boilerplate: true,
+              elevation: 2,
+              ...props
+            }
+          },
+          children
+        );
+      }
+    }
   },
   created() {
     this.getEvents();
