@@ -5,6 +5,7 @@
         <v-col>
           <div v-if="!loading">
             <Calendar :events="events"></Calendar>
+            {{}}
           </div>
           <div v-else>
             <v-sheet :color="`grey lighten-4`">
@@ -57,7 +58,10 @@ export default {
   methods: {
     async getEvents() {
       this.loading = true;
-      let events = await axios.get("/.netlify/functions/events");
+      //let events = await axios.get("/.netlify/functions/events");
+      let events = await axios.get(
+        "https://gata-calendar.netlify.com/.netlify/functions/events"
+      );
       this.eventBrite = events.data;
       this.loading = false;
     }
