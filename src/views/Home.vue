@@ -1,16 +1,33 @@
 <template>
   <div>
-    <Calendar :events="events"></Calendar>
+    <div v-if="!loading">
+      <Calendar :events="events"></Calendar>
+    </div>
+    <div v-else>LOADING...</div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import Calendar from "@/components/Calendar";
 export default {
   components: {
     Calendar
   },
+  created() {
+    this.getEvents();
+  },
+  methods: {
+    async getEvents() {
+      this.loading = true;
+      let events = await axios.get("/.netlify/functions/events");
+      this.eventBrite = events.data;
+      this.loading = false;
+    }
+  },
   data: () => ({
+    eventBrite: null,
+    loading: true,
     events: [
       {
         name: "PTO",
