@@ -81,9 +81,9 @@ export default {
         obj["position"]["details"] = event.details;
         this.positions.push(obj);
       });
-      console.log(this.positions);
+      //console.log(this.positions);
       this.markersLoading = false;
-      console.log(this.markersLoading);
+      //console.log(this.markersLoading);
     },
     displayUpcomingEvents(m) {
       this.displayInfo = true;
