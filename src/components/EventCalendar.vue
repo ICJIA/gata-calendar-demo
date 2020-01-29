@@ -1,13 +1,13 @@
 <template>
   <div>
-    <v-container class="hidden-sm-and-down"
+    <v-container
       ><v-row
         ><v-col>
           <!-- {{ this.start.date }} - {{ this.end.date }} - {{ this.type }} -->
           <div style="min-height: 30px">
             <div
               class="text-right"
-              style="max-height: 20px; font-size: 12px; font-weight: 900"
+              style="max-height: 20px; font-size: 12px; font-weight: 900; color: #B71C1C"
               v-if="loading"
             >
               Fetching GATA events
@@ -40,24 +40,43 @@
 
             <v-spacer></v-spacer>
 
-            <span class="mt-3 mr-10">
+            <span class="mt-3 mr-4">
               <v-btn small class="mr-3" @click="setCalendar('month')">
-                <v-icon v-if="loading" left class="custom-loader"
+                <v-icon
+                  v-if="loading"
+                  left
+                  :disabled="loading"
+                  class="custom-loader"
+                  color="red darken-4"
                   >cached</v-icon
                 >
                 <v-icon v-else left>fas fa-calendar-alt</v-icon>
                 <span class="">Month</span></v-btn
               >
 
-              <v-btn small class="mr-3" @click="setCalendar('week')"
-                ><v-icon left>fas fa-calendar-week</v-icon
-                ><span class="">Week</span></v-btn
-              >
+              <v-btn small class="mr-3" @click="setCalendar('week')">
+                <v-icon
+                  v-if="loading"
+                  left
+                  class="custom-loader"
+                  color="red darken-4"
+                  >cached</v-icon
+                >
+                <v-icon v-else left>fas fa-calendar-week</v-icon>
+                <span class="">Week</span>
+              </v-btn>
 
-              <v-btn small @click="setCalendar('day')"
-                ><v-icon left>fas fa-calendar-day</v-icon
-                ><span class="">Day</span></v-btn
-              >
+              <v-btn small @click="setCalendar('day')">
+                <v-icon
+                  v-if="loading"
+                  left
+                  class="custom-loader"
+                  color="red darken-4"
+                  >cached</v-icon
+                >
+                <v-icon v-else left>fas fa-calendar-day</v-icon>
+                <span class="">Day</span>
+              </v-btn>
             </span>
             <!-- <div style="width: 35px;" class="mr-10">
               <div v-if="loading" class="text-right">
@@ -71,7 +90,7 @@
             </div> -->
           </v-sheet>
 
-          <v-sheet height="800">
+          <v-sheet height="700">
             <v-calendar
               ref="calendar"
               v-model="value"
@@ -93,40 +112,40 @@
               offset-x
             >
               <v-card color="grey lighten-4" min-width="350px" flat>
-                <v-toolbar dark :color="selectedEvent.color">
+                <!-- <v-toolbar dark :color="selectedEvent.color">
                   <v-toolbar-title
                     v-html="selectedEvent.name"
                   ></v-toolbar-title>
                   <v-spacer></v-spacer>
-                </v-toolbar>
+                </v-toolbar> -->
                 <v-card-text>
-                  <CalendarDetails :event="selectedEvent"></CalendarDetails>
+                  <EventDetails
+                    :event="selectedEvent"
+                    :showTitle="true"
+                    :key="new Date()"
+                  ></EventDetails>
                 </v-card-text>
-                <v-card-actions>
+                <!-- <v-card-actions>
+                  <v-spacer></v-spacer>
                   <v-btn text color="secondary" @click="selectedOpen = false">
                     CLOSE
                   </v-btn>
-                </v-card-actions>
+                </v-card-actions> -->
               </v-card>
             </v-menu></v-sheet
           ></v-col
         ></v-row
       ></v-container
     >
-    <v-container class="hidden-md-and-up"
-      ><v-row
-        ><v-col
-          ><CalendarMobile :events="events"></CalendarMobile></v-col></v-row
-    ></v-container>
   </div>
 </template>
 
 <script>
 /* eslint-disable no-unused-vars */
-import axios from "axios";
+
 import moment from "moment";
-import CalendarMobile from "@/components/CalendarMobile";
-import CalendarDetails from "@/components/CalendarDetails";
+
+import EventDetails from "@/components/EventDetails";
 import NProgress from "nprogress";
 export default {
   data() {
@@ -141,20 +160,25 @@ export default {
       end: {},
       today: moment().format("YYYY-MM-DD"),
       value: "",
-      loading: true,
-      events: [],
       colorMap: [
         { name: "gata", color: "blue darken-4" },
         { name: "r3", color: "orange" }
       ]
     };
   },
-  components: {
-    CalendarMobile,
-    CalendarDetails
+  watch: {},
+  props: {
+    events: {
+      type: Array,
+      default: () => []
+    },
+    loading: {
+      type: Boolean,
+      default: true
+    }
   },
-  created() {
-    this.getEventBriteEvents();
+  components: {
+    EventDetails
   },
 
   computed: {
@@ -171,36 +195,6 @@ export default {
     }
   },
   methods: {
-    getColor(name) {
-      let type = name.split(":");
-
-      let obj = this.colorMap.filter(c => {
-        return c.name === type[0].toLowerCase();
-      });
-      if (obj.length) {
-        return obj[0].color;
-      } else {
-        return "red";
-      }
-    },
-    async getEventBriteEvents() {
-      this.loading = true;
-      NProgress.start();
-
-      let events = await axios.get(`/.netlify/functions/events`);
-      this.events = events.data.events.map(event => {
-        let obj = {};
-        obj.name = event.name.text;
-        obj.start = event.start.local;
-        obj.end = event.end.local;
-        obj.color = this.getColor(event.name.text);
-        obj.details = event;
-        return obj;
-      });
-
-      NProgress.done();
-      this.loading = false;
-    },
     getEvents(e) {
       const { start, end } = e;
       this.start = start;

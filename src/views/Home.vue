@@ -4,7 +4,64 @@
       <v-row>
         <v-col>
           <div>
-            <Calendar></Calendar>
+            <!-- <EventMap :events="events" :loading="loading" :showAddress="false"></EventMap> -->
+
+            <v-card class="hidden-sm-and-down">
+              <v-tabs
+                v-model="tab"
+                grow
+                centered
+                icons-and-text
+                background-color="grey lighten-2"
+              >
+                <v-tabs-slider></v-tabs-slider>
+
+                <v-tab href="#tab-by-date">
+                  Event Calender
+                  <v-icon>calendar_today</v-icon>
+                </v-tab>
+
+                <v-tab href="#tab-full-list">
+                  Full listing
+                  <v-icon class="material-icons">format_align_justify</v-icon>
+                </v-tab>
+              </v-tabs>
+
+              <v-tabs-items v-model="tab">
+                <v-tab-item value="tab-by-date">
+                  <v-card flat>
+                    <EventCalendar
+                      :events="events"
+                      :loading="loading"
+                      :showTitle="false"
+                    ></EventCalendar>
+                  </v-card>
+                </v-tab-item>
+
+                <v-tab-item value="tab-full-list">
+                  <v-card flat>
+                    <v-card-text
+                      ><EventList :events="events"></EventList
+                    ></v-card-text>
+                  </v-card>
+                </v-tab-item>
+              </v-tabs-items>
+            </v-card>
+            <div class="hidden-md-and-up">
+              <div class="text-center">
+                <h2>Upcoming Technical Assistance Events</h2>
+              </div>
+              <div v-if="loading" class="text-center">
+                <v-progress-circular
+                  :size="60"
+                  :width="7"
+                  color="purple"
+                  class="mt-10"
+                  indeterminate
+                ></v-progress-circular>
+              </div>
+              <EventList v-else :events="events"></EventList>
+            </div>
           </div>
         </v-col>
       </v-row>
@@ -13,15 +70,56 @@
 </template>
 
 <script>
-import Calendar from "@/components/Calendar";
+/* eslint-disable vue/no-unused-components */
 
+import axios from "axios";
+import EventCalendar from "@/components/EventCalendar";
+import EventMap from "@/components/EventMap";
+import EventList from "@/components/EventList";
 export default {
   components: {
-    Calendar
-    // eslint-disable-next-line vue/no-unused-components
+    EventCalendar,
+    EventMap,
+    EventList
   },
-  created() {},
-  methods: {},
-  data: () => ({})
+  created() {
+    this.getEventBriteEvents();
+  },
+
+  methods: {
+    getColor(name) {
+      let type = name.split(":");
+
+      let obj = this.colorMap.filter(c => {
+        return c.name === type[0].toLowerCase();
+      });
+      if (obj.length) {
+        return obj[0].color;
+      } else {
+        return "red";
+      }
+    },
+    async getEventBriteEvents() {
+      this.loading = true;
+
+      let events = await axios.get(`/.netlify/functions/events`);
+      this.events = events.data.events.map(event => {
+        let obj = {};
+        obj.name = event.name.text;
+        obj.start = event.start.local;
+        obj.end = event.end.local;
+        obj.color = "blue darken-4";
+        obj.details = event;
+        return obj;
+      });
+
+      this.loading = false;
+    }
+  },
+  data: () => ({
+    loading: true,
+    events: [],
+    tab: null
+  })
 };
 </script>
