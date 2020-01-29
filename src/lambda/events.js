@@ -35,11 +35,14 @@ exports.handler = async (event, context) => {
   // );
 
   let events = await axios.get(
-    `https://www.eventbriteapi.com/v3/users/me/events/?token=${EVENTBRITE_TOKEN}&page_size=100&expand=venue,format,ticket_classes&order_by=start_asc`
+    `https://www.eventbriteapi.com/v3/users/me/events/?token=${EVENTBRITE_TOKEN}&status=live&page_size=100&expand=venue,format,ticket_classes&order_by=start_asc`
   );
 
   return {
     statusCode: 200,
+    headers: {
+      "Access-Control-Allow-Origin": "*"
+    },
     body: JSON.stringify(events.data)
   };
 };
