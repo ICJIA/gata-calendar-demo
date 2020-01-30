@@ -17,7 +17,12 @@
                 <v-tabs-slider></v-tabs-slider>
 
                 <v-tab href="#tab-by-date">
-                  Event Calender
+                  Events by Date
+                  <v-icon>calendar_today</v-icon>
+                </v-tab>
+
+                <v-tab href="#tab-map">
+                  Events by Location
                   <v-icon>calendar_today</v-icon>
                 </v-tab>
 
@@ -28,7 +33,7 @@
               </v-tabs>
 
               <v-tabs-items v-model="tab">
-                <v-tab-item value="tab-by-date">
+                <v-tab-item value="tab-by-date" :eager="true">
                   <v-card flat>
                     <EventCalendar
                       :events="events"
@@ -38,7 +43,18 @@
                   </v-card>
                 </v-tab-item>
 
-                <v-tab-item value="tab-full-list">
+                <v-tab-item value="tab-map" :eager="true">
+                  <v-card flat
+                    ><EventMap
+                      :events="events"
+                      :loading="loading"
+                      :showAddress="false"
+                      :showTitle="true"
+                    ></EventMap>
+                  </v-card>
+                </v-tab-item>
+
+                <v-tab-item value="tab-full-list" :eager="true">
                   <v-card flat>
                     <v-card-text
                       ><EventList :events="events"></EventList
