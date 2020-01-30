@@ -21,13 +21,13 @@
                   <v-icon>calendar_today</v-icon>
                 </v-tab>
 
-                <v-tab href="#tab-map">
+                <v-tab :disabled="loading" href="#tab-map">
                   Events by Location
                   <v-icon>calendar_today</v-icon>
                 </v-tab>
 
-                <v-tab href="#tab-full-list">
-                  Full listing
+                <v-tab :disabled="loading" href="#tab-full-list">
+                  All Events
                   <v-icon class="material-icons">format_align_justify</v-icon>
                 </v-tab>
               </v-tabs>
@@ -57,16 +57,21 @@
                 <v-tab-item value="tab-full-list" :eager="true">
                   <v-card flat>
                     <v-card-text
-                      ><EventList :events="events"></EventList
+                      ><EventList
+                        :events="events"
+                        :loading="loading"
+                      ></EventList
                     ></v-card-text>
                   </v-card>
                 </v-tab-item>
               </v-tabs-items>
             </v-card>
             <div class="hidden-md-and-up">
-              <div class="text-center">
-                <h2>Upcoming Technical Assistance Events</h2>
-              </div>
+              <v-card flat>
+                <v-card-text
+                  ><EventList :events="events" :loading="loading"></EventList
+                ></v-card-text>
+              </v-card>
               <div v-if="loading" class="text-center">
                 <v-progress-circular
                   :size="60"
@@ -135,7 +140,8 @@ export default {
   data: () => ({
     loading: true,
     events: [],
-    tab: null
+    tab: null,
+    clientGeolocation: null
   })
 };
 </script>

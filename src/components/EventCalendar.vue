@@ -111,32 +111,14 @@
               :activator="selectedElement"
               offset-x
             >
-              <v-card color="grey lighten-4" min-width="350px" flat>
-                <!-- <v-toolbar dark :color="selectedEvent.color">
-                  <v-toolbar-title
-                    v-html="selectedEvent.name"
-                  ></v-toolbar-title>
-                  <v-spacer></v-spacer>
-                </v-toolbar> -->
-                <v-card-text>
-                  <EventDetails
-                    :event="selectedEvent"
-                    :showTitle="true"
-                    :key="new Date()"
-                  ></EventDetails>
-                </v-card-text>
-                <!-- <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn text color="secondary" @click="selectedOpen = false">
-                    CLOSE
-                  </v-btn>
-                </v-card-actions> -->
-              </v-card>
-            </v-menu></v-sheet
-          ></v-col
-        ></v-row
-      ></v-container
-    >
+              <v-sheet min-width="350px">
+                <EventDetails
+                  :event="selectedEvent"
+                  :showTitle="true"
+                  :key="new Date()"
+                ></EventDetails>
+              </v-sheet> </v-menu></v-sheet></v-col></v-row
+    ></v-container>
   </div>
 </template>
 

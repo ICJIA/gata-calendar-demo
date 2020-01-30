@@ -2,7 +2,7 @@
   <div>
     <GmapMap
       :center="center"
-      :zoom="12"
+      :zoom="10"
       map-type-id="terrain"
       style="width: 100%; height: 600px"
       class="mt-2"
@@ -23,9 +23,11 @@
         @click="displayUpcomingEvents(m, i)"
       ></gmap-marker>
     </GmapMap>
-    <div v-if="displayInfo">
-      <div v-for="event in eventsAtThisPosition" :key="event.details.id">
-        <EventDetails :event="event"></EventDetails>
+    <div id="upcoming-events">
+      <div v-if="displayInfo" class="mt-3">
+        <div v-for="event in eventsAtThisPosition" :key="event.details.id">
+          <EventDetails :event="event"></EventDetails>
+        </div>
       </div>
     </div>
   </div>
@@ -68,7 +70,34 @@ export default {
       markersLoading: true
     };
   },
+  created() {
+    this.geolocateClient();
+  },
   methods: {
+    geolocateClient() {
+      let vm = this;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(position) {
+            let pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+
+            console.log("Setting client location: ", pos);
+            vm.center.lat = pos.lat;
+            vm.center.lng = pos.lng;
+          },
+          function() {
+            console.log("using default map geolocation");
+          }
+        );
+      } else {
+        // Browser doesn't support Geolocation
+
+        console.log("using default map geolocation");
+      }
+    },
     setMarkers() {
       this.markersLoading = true;
       this.positions = [];
@@ -78,6 +107,7 @@ export default {
         obj["position"]["lat"] = Number(event.details.venue.address.latitude);
         obj["position"]["lng"] = Number(event.details.venue.address.longitude);
         obj["position"]["address"] = Number(event.details.venue.address);
+        obj["position"]["infoText"] = "Scroll down for event information.";
         obj["position"]["details"] = event.details;
         this.positions.push(obj);
       });
@@ -87,6 +117,7 @@ export default {
     },
     displayUpcomingEvents(m) {
       this.displayInfo = true;
+
       this.eventPosition = m.position.lat + " " + m.position.lng;
       let eventsAtThisPosition = this.events.filter(event => {
         if (
@@ -97,6 +128,8 @@ export default {
         }
       });
       this.eventsAtThisPosition = eventsAtThisPosition;
+      // Scroll to events
+      this.$vuetify.goTo("#upcoming-events");
     }
   },
   props: {

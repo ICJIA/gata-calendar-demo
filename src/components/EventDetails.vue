@@ -1,86 +1,96 @@
 <template>
   <div>
-    <v-card class="elevation-3 py-5 my-4">
-      <v-card-title v-if="showTitle">{{ event.name }}</v-card-title>
-      <v-card-text style=" font-weight: 900;">
-        <div style="font-size: 18px">
-          {{ moment(event.start).format("dddd, MMMM Do YYYY") }}
-        </div>
-        <div>
-          {{ moment(event.start).format("HH:mm a") }} -
-          {{ moment(event.end).format("HH:mm a") }}&nbsp;CT
-        </div>
-      </v-card-text>
-      <v-card-text>
-        <div v-html="event.details.description.html"></div>
-      </v-card-text>
-      <v-card-text style="margin-top: -30px;">
-        <div class="subtitle-1 black--text">
-          <v-card-text class="mb-5">
-            <strong>{{ event.details.venue.name }}</strong>
-            <div
-              v-for="(a, index) in event.details.venue.address
-                .localized_multi_line_address_display"
-              :key="index"
-            >
-              {{ a }}
-            </div></v-card-text
+    <v-row>
+      <v-col cols="12" sm="12" md="12" order-md="1" order="2" order-sm="2">
+        <v-card class="py-5 mx-2 grey lighten-4">
+          <h2
+            v-if="showTitle"
+            style="font-weight: 900"
+            class="pl-3"
+            :id="slugify(event.name)"
           >
-        </div>
-      </v-card-text>
+            {{ event.name }}
+          </h2>
+          <v-card-text style=" font-weight: 700;">
+            <div style="font-size: 18px">
+              {{ moment(event.start).format("dddd, MMMM Do YYYY") }}
+            </div>
+            <div>
+              {{ moment(event.start).format("HH:mm a") }} -
+              {{ moment(event.end).format("HH:mm a") }}&nbsp;CST
+            </div>
+          </v-card-text>
+          <v-card-text style="margin-top: -15px;">
+            <div v-html="event.details.description.html"></div>
+          </v-card-text>
+          <v-card-text style="margin-top: -30px;">
+            <div class="subtitle-1 black--text">
+              <v-card-text class="mb-5">
+                <strong>{{ event.details.venue.name }}</strong>
 
-      <v-divider class="mx-4"></v-divider>
+                <div>
+                  {{ event.details.venue.address.localized_address_display }}
+                </div>
+              </v-card-text>
+            </div>
+          </v-card-text>
 
-      <v-card-title>Availability</v-card-title>
+          <v-divider class="mx-4" style="margin-top: -25px;"></v-divider>
 
-      <v-card-text class="mb-5">
-        <v-chip-group
-          v-model="selection"
-          active-class="deep-purple accent-4 white--text"
-          column
-        >
-          <div>
+          <!-- <v-card-title>Availability</v-card-title> -->
+
+          <v-card-actions class="mt-3">
             <v-chip class="seats-available">
-              {{
-                event.details.ticket_classes[0]["quantity_total"] -
-                  event.details.ticket_classes[0]["quantity_sold"]
-              }}
+              {{ seatsRemaing }}
               seats remaining</v-chip
             >
-          </div>
-        </v-chip-group>
-      </v-card-text>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-          dark
-          color="blue darken-4"
-          :href="event.details.url"
-          target="_blank"
-          class="mr-5"
-        >
-          Register Now
-        </v-btn>
-      </v-card-actions>
-    </v-card>
+            <v-spacer></v-spacer>
+            <v-btn
+              v-if="seatsRemaing > 0"
+              dark
+              color="blue darken-4"
+              :href="event.details.url"
+              target="_blank"
+              class="mr-5"
+            >
+              Register Now
+            </v-btn>
+            <v-btn
+              v-else
+              dark
+              color="red darken-4"
+              :href="event.details.url"
+              target="_blank"
+              class="mr-5"
+            >
+              Get on Waitlist
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
+import slugify from "url-slug";
 import moment from "moment";
 export default {
   methods: {
     register() {}
   },
   computed: {
-    quantitySold() {
-      return this.event.details.ticket_classes[0]["quantity_sold"];
+    seatsRemaing() {
+      return (
+        this.event.details.ticket_classes[0]["quantity_total"] -
+        this.event.details.ticket_classes[0]["quantity_sold"]
+      );
     }
   },
   data() {
     return {
-      moment
+      moment,
+      slugify
     };
   },
   props: {
