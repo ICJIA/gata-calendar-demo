@@ -7,7 +7,7 @@
             v-if="showTitle"
             style="font-weight: 900"
             class="pl-3"
-            :id="slugify(event.name)"
+            id="event.name"
           >
             {{ event.name }}
           </h2>
@@ -73,7 +73,6 @@
 </template>
 
 <script>
-import slugify from "url-slug";
 import moment from "moment";
 export default {
   methods: {
@@ -89,8 +88,7 @@ export default {
   },
   data() {
     return {
-      moment,
-      slugify
+      moment
     };
   },
   props: {

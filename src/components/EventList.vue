@@ -14,7 +14,7 @@
           <h2
             class="mb-5 ml-2 tocHeading"
             style="font-size: 32px; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
-            :id="slugify(city)"
+            id="city"
           >
             {{ city }}
           </h2>
@@ -30,7 +30,6 @@
 <script>
 import EventDetails from "@/components/EventDetails";
 
-import slugify from "url-slug";
 // eslint-disable-next-line no-unused-vars
 import _ from "lodash";
 export default {
@@ -55,7 +54,7 @@ export default {
       groupedEvents: null,
       cities: [],
       isGrouped: false,
-      slugify,
+
       toc: null
     };
   },
