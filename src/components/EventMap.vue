@@ -4,7 +4,7 @@
       :center="center"
       :zoom="10"
       map-type-id="terrain"
-      style="width: 100%; height: 600px"
+      style="width: 100%; height: 400px"
       class="mt-2"
     >
       <gmap-info-window
