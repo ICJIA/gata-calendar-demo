@@ -123,7 +123,11 @@ export default {
     async getEventBriteEvents() {
       this.loading = true;
 
-      let events = await axios.get(`/.netlify/functions/events`);
+      //let events = await axios.get(`/.netlify/functions/events`);
+
+      let events = await axios.get(
+        `https://gata-calendar.netlify.com/.netlify/functions/events`
+      );
       this.events = events.data.events.map(event => {
         let obj = {};
         obj.name = event.name.text;
