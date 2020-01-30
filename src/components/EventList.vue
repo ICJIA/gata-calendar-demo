@@ -1,29 +1,17 @@
 <template>
   <div>
-    <v-row>
-      <v-col
-        cols="12"
-        sm="12"
-        :md="dynamicFlex()"
-        order-md="1"
-        order="2"
-        order-sm="2"
-        id="scrollArea"
+    <div v-for="(city, index) in cities" :key="index" style="">
+      <h2
+        class="mb-5 tocHeading"
+        style="font-size: 32px; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
+        id="city"
       >
-        <div v-for="(city, index) in cities" :key="index" style="">
-          <h2
-            class="mb-5 ml-2 tocHeading"
-            style="font-size: 32px; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
-            id="city"
-          >
-            {{ city }}
-          </h2>
-          <div v-for="event in groupedEvents[city]" :key="event.details.id">
-            <EventDetails :event="event"></EventDetails>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+        {{ city }}
+      </h2>
+      <div v-for="event in groupedEvents[city]" :key="event.details.id">
+        <EventDetails :event="event" class="mb-2"></EventDetails>
+      </div>
+    </div>
   </div>
 </template>
 

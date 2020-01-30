@@ -1,74 +1,70 @@
 <template>
   <div>
-    <v-row>
-      <v-col cols="12" sm="12" md="12" order-md="1" order="2" order-sm="2">
-        <v-card class="py-5 grey lighten-4">
-          <h2
-            v-if="showTitle"
-            style="font-weight: 900"
-            class="pl-3"
-            id="event.name"
-          >
-            {{ event.name }}
-          </h2>
-          <v-card-text style=" font-weight: 700;">
-            <div style="font-size: 18px">
-              {{ moment(event.start).format("dddd, MMMM DD, YYYY") }}
-            </div>
-            <div class="mt-1">
-              {{ moment(event.start).format("hh:mm a") }} -
-              {{ moment(event.end).format("hh:mm a") }}&nbsp;CST
-            </div>
-          </v-card-text>
-          <v-card-text style="margin-top: -15px;">
-            <div v-html="event.details.description.html"></div>
-          </v-card-text>
-          <v-card-text style="margin-top: -30px;">
-            <div class="subtitle-1 black--text">
-              <v-card-text class="mb-5">
-                <strong>{{ event.details.venue.name }}</strong>
+    <v-card class="py-5 grey lighten-4 elevation-6">
+      <h2
+        v-if="showTitle"
+        style="font-weight: 900"
+        class="pl-3"
+        id="event.name"
+      >
+        {{ event.name }}
+      </h2>
+      <v-card-text style=" font-weight: 700;">
+        <div style="font-size: 18px">
+          {{ moment(event.start).format("dddd, MMMM DD, YYYY") }}
+        </div>
+        <div class="mt-1">
+          {{ moment(event.start).format("hh:mm a") }} -
+          {{ moment(event.end).format("hh:mm a") }}&nbsp;CST
+        </div>
+      </v-card-text>
+      <v-card-text style="margin-top: -15px;">
+        <div v-html="event.details.description.html"></div>
+      </v-card-text>
+      <v-card-text style="margin-top: -30px;">
+        <div class="subtitle-1 black--text">
+          <v-card-text class="mb-5">
+            <strong>{{ event.details.venue.name }}</strong>
 
-                <div>
-                  {{ event.details.venue.address.localized_address_display }}
-                </div>
-              </v-card-text>
+            <div>
+              {{ event.details.venue.address.localized_address_display }}
             </div>
           </v-card-text>
+        </div>
+      </v-card-text>
 
-          <v-divider class="mx-4" style="margin-top: -25px;"></v-divider>
+      <v-divider class="mx-4" style="margin-top: -25px;"></v-divider>
 
-          <!-- <v-card-title>Availability</v-card-title> -->
+      <!-- <v-card-title>Availability</v-card-title> -->
 
-          <v-card-actions class="mt-3">
-            <v-chip class="seats-available">
-              {{ seatsRemaing }}
-              seats remaining</v-chip
-            >
-            <v-spacer></v-spacer>
-            <v-btn
-              v-if="seatsRemaing > 0"
-              dark
-              color="blue darken-4"
-              :href="event.details.url"
-              target="_blank"
-              class="mr-5"
-            >
-              Register Now
-            </v-btn>
-            <v-btn
-              v-else
-              dark
-              color="red darken-4"
-              :href="event.details.url"
-              target="_blank"
-              class="mr-5"
-            >
-              Get on Waitlist
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+      <v-card-actions class="mt-3">
+        <v-chip class="seats-available">
+          {{ seatsRemaing }}
+          seats remaining</v-chip
+        >
+        <v-spacer></v-spacer>
+        <v-btn
+          v-if="seatsRemaing > 0"
+          dark
+          color="blue darken-4"
+          :href="event.details.url"
+          target="_blank"
+          class="mr-5"
+        >
+          Register Now
+        </v-btn>
+        <v-btn
+          v-else
+          dark
+          color="red darken-4"
+          :href="event.details.url"
+          target="_blank"
+          class="mr-5"
+        >
+          Get on Waitlist
+        </v-btn>
+      </v-card-actions>
+    </v-card>
   </div>
 </template>
 
