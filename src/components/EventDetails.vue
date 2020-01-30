@@ -2,7 +2,7 @@
   <div>
     <v-row>
       <v-col cols="12" sm="12" md="12" order-md="1" order="2" order-sm="2">
-        <v-card class="py-5 mx-2 grey lighten-4">
+        <v-card class="py-5 grey lighten-4">
           <h2
             v-if="showTitle"
             style="font-weight: 900"
@@ -13,11 +13,11 @@
           </h2>
           <v-card-text style=" font-weight: 700;">
             <div style="font-size: 18px">
-              {{ moment(event.start).format("dddd, MMMM Do YYYY") }}
+              {{ moment(event.start).format("dddd, MMMM DD, YYYY") }}
             </div>
-            <div>
-              {{ moment(event.start).format("HH:mm a") }} -
-              {{ moment(event.end).format("HH:mm a") }}&nbsp;CST
+            <div class="mt-1">
+              {{ moment(event.start).format("hh:mm a") }} -
+              {{ moment(event.end).format("hh:mm a") }}&nbsp;CST
             </div>
           </v-card-text>
           <v-card-text style="margin-top: -15px;">

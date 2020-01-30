@@ -111,7 +111,7 @@
               :activator="selectedElement"
               offset-x
             >
-              <v-sheet min-width="350px">
+              <v-sheet max-width="400px">
                 <EventDetails
                   :event="selectedEvent"
                   :showTitle="true"
