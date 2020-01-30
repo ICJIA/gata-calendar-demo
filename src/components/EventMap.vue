@@ -2,7 +2,7 @@
   <div>
     <GmapMap
       :center="center"
-      :zoom="10"
+      :zoom="6"
       map-type-id="terrain"
       style="width: 100%; height: 400px"
       class="mt-2"
