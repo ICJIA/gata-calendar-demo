@@ -4,7 +4,7 @@
       :center="center"
       :zoom="6"
       map-type-id="terrain"
-      style="width: 100%; height: 400px"
+      style="width: 100%; height: 350px"
       class="mt-2"
     >
       <gmap-info-window
@@ -26,7 +26,10 @@
     <div id="upcoming-events">
       <div v-if="displayInfo" class="mt-3">
         <div v-for="event in eventsAtThisPosition" :key="event.details.id">
-          <EventDetails :event="event"></EventDetails>
+          <EventDetails
+            :event="event"
+            class="mb-3 animated fadeIn"
+          ></EventDetails>
         </div>
       </div>
     </div>
@@ -36,6 +39,10 @@
 <script>
 //import moment from "moment";
 import EventDetails from "@/components/EventDetails";
+// eslint-disable-next-line no-unused-vars
+function click(e) {
+  console.log("click", e);
+}
 export default {
   watch: {
     loading(newValue) {
@@ -73,7 +80,11 @@ export default {
   created() {
     this.geolocateClient();
   },
+  mounted() {},
   methods: {
+    onClickModel() {
+      console.log("click");
+    },
     geolocateClient() {
       let vm = this;
       if (navigator.geolocation) {
@@ -106,16 +117,14 @@ export default {
         obj["position"] = {};
         obj["position"]["lat"] = Number(event.details.venue.address.latitude);
         obj["position"]["lng"] = Number(event.details.venue.address.longitude);
-        obj["position"]["address"] = Number(event.details.venue.address);
-        obj["position"]["infoText"] = "Scroll down for event information.";
-        obj["position"]["details"] = event.details;
+        obj["position"]["venue"] = event.details.venue;
         this.positions.push(obj);
       });
       //console.log(this.positions);
       this.markersLoading = false;
       //console.log(this.markersLoading);
     },
-    displayUpcomingEvents(m) {
+    displayUpcomingEvents(m, i) {
       this.displayInfo = true;
 
       this.eventPosition = m.position.lat + " " + m.position.lng;
@@ -129,7 +138,27 @@ export default {
       });
       this.eventsAtThisPosition = eventsAtThisPosition;
       // Scroll to events
-      this.$vuetify.goTo("#upcoming-events");
+      //this.$vuetify.goTo("#upcoming-events");
+
+      this.infoWindowPos = m.position;
+      let eventText = eventsAtThisPosition.length > 1 ? "events" : "event";
+      let markerMessage = `<div ><span style="font-weight: 900; font-size: 14px;">${eventsAtThisPosition.length}</span> upcoming ${eventText} at: &nbsp;&nbsp;</div>`;
+      markerMessage =
+        markerMessage +
+        `<div style="font-weight: 900; margin-top: 10px;">${m.position.venue.name}</div>`;
+      markerMessage =
+        markerMessage +
+        `<div style="margin-bottom: 10px">${m.position.venue.address.localized_address_display}</div>`;
+
+      this.infoContent = markerMessage;
+
+      if (this.currentMidx == i) {
+        this.infoWinOpen = !this.infoWinOpen;
+      } else {
+        this.infoWinOpen = true;
+        this.currentMidx = i;
+        console.log(this.$refs);
+      }
     }
   },
   props: {

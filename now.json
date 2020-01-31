@@ -1,5 +1,5 @@
 {
-  "name": "gata-calendar-test",
+  "name": "gata-calendar-now",
   "build": {
     "env": {
       "VUE_APP_GOOGLE_MAP_API_KEY": "@vue_app_google_map_api_key"
