@@ -26,7 +26,9 @@
     <div v-if="!displayInfo">
       <div class="text-center">
         <div class="py-3">
-          <h2 style="color: #444;">Click marker for venue information.</h2>
+          <h2 style="color: #444;" class="animated fadeInLeft">
+            Click marker for venue information.
+          </h2>
         </div>
       </div>
     </div>
@@ -155,7 +157,7 @@ export default {
         `<div style="font-weight: 900; margin-top: 10px;">${m.position.venue.name}</div>`;
       markerMessage =
         markerMessage +
-        `<div style="margin-bottom: 10px">${m.position.venue.address.localized_address_display}</div>`;
+        `<div style="margin-top: 5px; margin-bottom: 10px">${m.position.venue.address.localized_address_display}</div>`;
 
       this.infoContent = markerMessage;
 
@@ -181,4 +183,10 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style>
+.gm-style .gm-style-iw {
+  font-weight: 300;
+  font-size: 16px;
+  overflow: hidden;
+}
+</style>
