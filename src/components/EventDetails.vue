@@ -14,8 +14,8 @@
           {{ moment(event.start).format("dddd, MMMM DD, YYYY") }}
         </div>
         <div class="mt-1">
-          {{ moment(event.start).format("hh:mm a") }} -
-          {{ moment(event.end).format("hh:mm a") }}&nbsp;CST
+          {{ moment(event.start).format("h:mm a") }} -
+          {{ moment(event.end).format("h:mm a") }}&nbsp;CST
         </div>
       </v-card-text>
       <v-card-text style="margin-top: -15px;">
