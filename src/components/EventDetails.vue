@@ -45,13 +45,14 @@
         <v-spacer></v-spacer>
         <v-btn
           v-if="seatsRemaing > 0"
-          dark
           color="blue darken-4"
           :href="event.details.url"
           target="_blank"
           class="mr-5"
+          dark
         >
-          Register Now
+          Register Now&nbsp;
+          <v-icon small right>open_in_new</v-icon>
         </v-btn>
         <v-btn
           v-else

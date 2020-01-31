@@ -6,6 +6,7 @@
       item-value="id"
       item-text="name"
       label="Sort By"
+      filled
       v-on:change="changeSort(`${sort.sort_id}`)"
     />
     <div v-if="sort.sort_id === 1">
@@ -35,7 +36,7 @@
       >
         <h2
           class="mb-5 tocHeading"
-          style="font-size: 32px; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
+          style="font-size: 32px; line-height: 1.2em; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
           id="eventDate"
         >
           {{ moment(eventDate).format("dddd, MMMM DD, YYYY") }}

@@ -23,6 +23,13 @@
         @click="displayUpcomingEvents(m, i)"
       ></gmap-marker>
     </GmapMap>
+    <div v-if="!displayInfo">
+      <div class="text-center">
+        <div class="py-3">
+          <h2 style="color: #444;">Click marker for venue information.</h2>
+        </div>
+      </div>
+    </div>
     <div id="upcoming-events">
       <div v-if="displayInfo" class="mt-3">
         <div v-for="event in eventsAtThisPosition" :key="event.details.id">

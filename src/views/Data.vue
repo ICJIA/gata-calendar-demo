@@ -3,13 +3,20 @@
     <v-container>
       <v-row>
         <v-col>
-          <div>
-            <EventMap
-              :events="events"
-              :loading="loading"
-              :showAddress="false"
-              :showTitle="true"
-            ></EventMap>
+          <div v-if="!loading">
+            <div v-for="event in events" :key="event.details.id">
+              <v-card class="px-8 py-8 mb-4">
+                {{ event }}
+              </v-card>
+            </div>
+          </div>
+          <div v-else class="text-center">
+            <v-progress-circular
+              :size="70"
+              :width="7"
+              color="purple"
+              indeterminate
+            ></v-progress-circular>
           </div>
         </v-col>
       </v-row>
@@ -20,30 +27,13 @@
 <script>
 /* eslint-disable vue/no-unused-components */
 import axios from "axios";
-import EventCalendar from "@/components/EventCalendar";
-import EventMap from "@/components/EventMap";
 export default {
-  components: {
-    EventCalendar,
-    EventMap
-  },
+  components: {},
   created() {
     this.getEventBriteEvents();
   },
 
   methods: {
-    getColor(name) {
-      let type = name.split(":");
-
-      let obj = this.colorMap.filter(c => {
-        return c.name === type[0].toLowerCase();
-      });
-      if (obj.length) {
-        return obj[0].color;
-      } else {
-        return "red";
-      }
-    },
     async getEventBriteEvents() {
       this.loading = true;
 

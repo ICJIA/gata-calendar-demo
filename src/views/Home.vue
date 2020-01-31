@@ -23,7 +23,7 @@
 
                 <v-tab :disabled="loading" href="#tab-map">
                   Events by Location
-                  <v-icon>calendar_today</v-icon>
+                  <v-icon>add_location</v-icon>
                 </v-tab>
 
                 <v-tab :disabled="loading" href="#tab-full-list">
