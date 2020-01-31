@@ -13,6 +13,7 @@
         v-for="(city, index) in cities"
         :key="index"
         style="margin-top: -20px;"
+        class="animated fadeIn"
       >
         <h2
           class="mb-5 tocHeading"
@@ -21,14 +22,27 @@
         >
           {{ city }}
         </h2>
-        <div v-for="event in groupedEvents[city]" :key="event.details.id">
+        <div v-for="event in groupedCities[city]" :key="event.details.id">
           <EventDetails :event="event" class="mb-2"></EventDetails>
         </div>
       </div>
     </div>
-    <div v-if="sort.sort_id === 2" class="mt-8">
-      <div v-for="event in events" :key="event.details.id">
-        <EventDetails :event="event" class="mb-2"></EventDetails>
+    <div v-if="sort.sort_id === 2" class="mt-8 animated fadeIn">
+      <div
+        v-for="(eventDate, index) in dates"
+        :key="index"
+        style="margin-top: -20px;"
+      >
+        <h2
+          class="mb-5 tocHeading"
+          style="font-size: 32px; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
+          id="eventDate"
+        >
+          {{ moment(eventDate).format("dddd, MMMM DD, YYYY") }}
+        </h2>
+        <div v-for="event in groupedDates[eventDate]" :key="event.details.id">
+          <EventDetails :event="event" class="mb-2"></EventDetails>
+        </div>
       </div>
     </div>
   </div>
@@ -36,14 +50,14 @@
 
 <script>
 import EventDetails from "@/components/EventDetails";
-
+import moment from "moment";
 // eslint-disable-next-line no-unused-vars
 import _ from "lodash";
 export default {
   watch: {
     loading(newValue) {
       if (newValue === false) {
-        this.groupByCity();
+        this.groupAllEvents();
       }
     }
   },
@@ -59,10 +73,12 @@ export default {
   },
   data() {
     return {
-      groupedEvents: null,
+      groupedCities: null,
+      groupedDates: null,
+      dates: [],
       cities: [],
       isGrouped: false,
-
+      moment,
       toc: null,
       sort: {
         sort_id: 1
@@ -84,16 +100,23 @@ export default {
     changeSort(a) {
       console.log(a, this.sort.sort_id);
     },
-    groupByCity() {
+    groupAllEvents() {
       this.isGrouped = false;
-      this.groupedEvents = _.groupBy(this.events, function(event) {
+      this.groupedCities = _.groupBy(this.events, function(event) {
         return event.details.venue.address.city;
       });
-      for (const property in this.groupedEvents) {
+      this.groupedDates = _.groupBy(this.events, function(event) {
+        return event.start;
+      });
+      for (const property in this.groupedCities) {
         this.cities.push(property);
       }
+      for (const property in this.groupedDates) {
+        this.dates.push(property);
+      }
       this.cities.sort();
-      console.log(this.sortedEvents);
+      this.dates.sort();
+
       this.isGrouped = true;
     },
     dynamicFlex() {
