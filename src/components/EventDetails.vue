@@ -57,12 +57,13 @@
         <v-btn
           v-else
           dark
-          color="red darken-4"
+          color="red lighten-2"
           :href="event.details.url"
           target="_blank"
           class="mr-5"
         >
-          Get on Waitlist
+          Add to Waitlist
+          <v-icon small right>open_in_new</v-icon>
         </v-btn>
       </v-card-actions>
     </v-card>
