@@ -1,14 +1,33 @@
 <template>
   <div>
-    <div v-for="(city, index) in cities" :key="index" style="">
-      <h2
-        class="mb-5 tocHeading"
-        style="font-size: 32px; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
-        id="city"
+    <v-select
+      v-model="sort.sort_id"
+      :items="sortBy"
+      item-value="id"
+      item-text="name"
+      label="Sort By"
+      v-on:change="changeSort(`${sort.sort_id}`)"
+    />
+    <div v-if="sort.sort_id === 1">
+      <div
+        v-for="(city, index) in cities"
+        :key="index"
+        style="margin-top: -20px;"
       >
-        {{ city }}
-      </h2>
-      <div v-for="event in groupedEvents[city]" :key="event.details.id">
+        <h2
+          class="mb-5 tocHeading"
+          style="font-size: 32px; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
+          id="city"
+        >
+          {{ city }}
+        </h2>
+        <div v-for="event in groupedEvents[city]" :key="event.details.id">
+          <EventDetails :event="event" class="mb-2"></EventDetails>
+        </div>
+      </div>
+    </div>
+    <div v-if="sort.sort_id === 2" class="mt-8">
+      <div v-for="event in events" :key="event.details.id">
         <EventDetails :event="event" class="mb-2"></EventDetails>
       </div>
     </div>
@@ -28,6 +47,7 @@ export default {
       }
     }
   },
+
   computed: {
     showToc() {
       if (this.$vuetify.breakpoint.sm || this.$vuetify.breakpoint.xs) {
@@ -43,11 +63,27 @@ export default {
       cities: [],
       isGrouped: false,
 
-      toc: null
+      toc: null,
+      sort: {
+        sort_id: 1
+      },
+      sortBy: [
+        {
+          id: 1,
+          name: "City"
+        },
+        {
+          id: 2,
+          name: "Date"
+        }
+      ]
     };
   },
 
   methods: {
+    changeSort(a) {
+      console.log(a, this.sort.sort_id);
+    },
     groupByCity() {
       this.isGrouped = false;
       this.groupedEvents = _.groupBy(this.events, function(event) {
@@ -57,6 +93,7 @@ export default {
         this.cities.push(property);
       }
       this.cities.sort();
+      console.log(this.sortedEvents);
       this.isGrouped = true;
     },
     dynamicFlex() {
