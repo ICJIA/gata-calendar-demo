@@ -23,3 +23,7 @@ export default {
   })
 };
 </script>
+
+<style>
+@import "../src/assets/github-markdown.css";
+</style>
