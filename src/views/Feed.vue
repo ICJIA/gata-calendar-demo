@@ -35,13 +35,15 @@ export default {
   },
   data: function() {
     return {
-      activeTab: 0
+      activeTab: 0,
+      showFeed: false
     };
   },
   methods: {
     getHeadings() {
       //let headings = document.getElementsByClassName(`test01-tocHeading`);
-    }
+    },
+    contentLoaded() {}
   },
   mounted() {}
 };
