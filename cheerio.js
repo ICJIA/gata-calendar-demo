@@ -26,10 +26,10 @@ cheerioTableparser($);
 const data = $("table").parsetable(false, false, true);
 
 let json = [];
+let obj = {};
 for (let x = 1; x < data[0].length; x++) {
-  let obj = {};
   obj[slugify(data[0][x])] = data[1][x];
-  json.push(obj);
 }
+json.push(obj);
 
 console.log(json);

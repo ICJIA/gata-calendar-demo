@@ -7,16 +7,14 @@
             <v-card class="mb-10 px-5 py-5">
               <h3>{{ item.title }}</h3>
 
-              <span v-for="(category, index) in item.categories" :key="index">
+              <!-- <span v-for="(category, index) in item.categories" :key="index">
                 {{ category }}
-              </span>
-              {{ item.details }}
+              </span> -->
+              {{ item.details[0].description }}
             </v-card>
           </div>
         </div>
       </div>
-
-      {{ feed }}
     </v-container>
   </div>
 </template>
