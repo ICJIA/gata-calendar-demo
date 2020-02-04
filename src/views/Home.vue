@@ -1,12 +1,16 @@
 <template>
   <div>
-    <v-container>
+    <v-container
+      v-if="
+        $vuetify.breakpoint.md ||
+          $vuetify.breakpoint.lg ||
+          $vuetify.breakpoint.xl
+      "
+    >
       <v-row>
         <v-col>
           <div>
-            <!-- <EventMap :events="events" :loading="loading" :showAddress="false"></EventMap> -->
-
-            <v-card class="hidden-sm-and-down">
+            <v-card>
               <v-tabs
                 v-model="tab"
                 grow
@@ -66,24 +70,18 @@
                 </v-tab-item>
               </v-tabs-items>
             </v-card>
-            <div class="hidden-md-and-up">
-              <v-card flat>
-                <v-card-text
-                  ><EventList :events="events" :loading="loading"></EventList
-                ></v-card-text>
-              </v-card>
-              <div v-if="loading" class="text-center">
-                <v-progress-circular
-                  :size="60"
-                  :width="7"
-                  color="purple"
-                  class="mt-10"
-                  indeterminate
-                ></v-progress-circular>
-              </div>
-              <EventList v-else :events="events"></EventList>
-            </div>
           </div>
+        </v-col>
+      </v-row>
+    </v-container>
+    <v-container v-else>
+      <v-row>
+        <v-col>
+          <v-card flat>
+            <v-card-text>
+              <EventList :events="events" :loading="loading"></EventList>
+            </v-card-text>
+          </v-card>
         </v-col>
       </v-row>
     </v-container>
@@ -94,6 +92,7 @@
 /* eslint-disable vue/no-unused-components */
 
 import axios from "axios";
+
 import EventCalendar from "@/components/EventCalendar";
 import EventMap from "@/components/EventMap";
 import EventList from "@/components/EventList";
@@ -106,7 +105,7 @@ export default {
   created() {
     this.getEventBriteEvents();
   },
-
+  mounted() {},
   methods: {
     getColor(name) {
       let type = name.split(":");
@@ -120,6 +119,7 @@ export default {
         return "red";
       }
     },
+
     async getEventBriteEvents() {
       this.loading = true;
       let events = null;

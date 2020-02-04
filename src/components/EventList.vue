@@ -9,49 +9,82 @@
       filled
       v-on:change="changeSort(`${sort.sort_id}`)"
     />
-    <div v-if="sort.sort_id === 1">
-      <div
-        v-for="(city, index) in cities"
-        :key="index"
-        style="margin-top: -20px;"
-        class="animated fadeIn"
-      >
-        <h2
-          class="mb-5 tocHeading"
-          style="font-size: 28px; line-height: 1.2em;text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
-          id="city"
+
+    <div v-if="loading">LOADING</div>
+
+    <v-container style="margin: 0; padding: 0; width: 100%; ">
+      <v-row>
+        <v-col
+          cols="12"
+          sm="12"
+          :md="dynamicFlex()"
+          order-md="1"
+          order="2"
+          order-sm="2"
+          style="margin-top: -25px;"
         >
-          {{ city }}
-        </h2>
-        <div v-for="event in groupedCities[city]" :key="event.details.id">
-          <EventDetails :event="event" class="mb-2"></EventDetails>
-        </div>
-      </div>
-    </div>
-    <div v-if="sort.sort_id === 2" class="mt-8 animated fadeIn">
-      <div
-        v-for="(eventDate, index) in dates"
-        :key="index"
-        style="margin-top: -20px;"
-      >
-        <h2
-          class="mb-5 tocHeading"
-          style="font-size: 28px; line-height: 1.2em; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
-          id="eventDate"
+          <div v-if="sort.sort_id === 1">
+            <div
+              v-for="(city, index) in cities"
+              :key="index"
+              style="margin-top: -20px;"
+              class="animated fadeIn"
+            >
+              <h2
+                class="mb-5 tocHeadingList"
+                style="font-size: 28px; line-height: 1.2em;background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
+                :id="`city-${urlSlug(city)}`"
+              >
+                {{ city }}
+              </h2>
+              <div v-for="event in groupedCities[city]" :key="event.details.id">
+                <EventDetails :event="event" class="mb-2"></EventDetails>
+              </div>
+            </div>
+          </div>
+          <div v-if="sort.sort_id === 2" class="mt-8 animated fadeIn">
+            <div
+              v-for="(eventDate, index) in dates"
+              :key="index"
+              style="margin-top: -20px;"
+            >
+              <h2
+                class="mb-5 tocHeading"
+                style="font-size: 28px; line-height: 1.2em; text-transform: uppercase; background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
+                id="eventDate"
+              >
+                {{ moment(eventDate).format("dddd, MMMM DD, YYYY") }}
+              </h2>
+              <div
+                v-for="event in groupedDates[eventDate]"
+                :key="event.details.id"
+              >
+                <EventDetails :event="event" class="mb-2"></EventDetails>
+              </div>
+            </div>
+          </div>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="12"
+          md="3"
+          order-md="2"
+          order="1"
+          order-sm="1"
+          v-if="sort.sort_id === 1"
         >
-          {{ moment(eventDate).format("dddd, MMMM DD, YYYY") }}
-        </h2>
-        <div v-for="event in groupedDates[eventDate]" :key="event.details.id">
-          <EventDetails :event="event" class="mb-2"></EventDetails>
-        </div>
-      </div>
-    </div>
+          <Toc selector="#scrollArea" top="#baseContentTop" v-if="!loading" />
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
 <script>
 import EventDetails from "@/components/EventDetails";
+import Toc from "@/components/Toc";
 import moment from "moment";
+import urlSlug from "url-slug";
 // eslint-disable-next-line no-unused-vars
 import _ from "lodash";
 export default {
@@ -74,13 +107,15 @@ export default {
   },
   data() {
     return {
+      urlSlug,
       groupedCities: null,
       groupedDates: null,
       dates: [],
       cities: [],
+      sections: null,
       isGrouped: false,
       moment,
-      toc: null,
+
       sort: {
         sort_id: 1
       },
@@ -97,11 +132,13 @@ export default {
     };
   },
 
+  async mounted() {},
   methods: {
     changeSort(a) {
       console.log(a, this.sort.sort_id);
     },
-    groupAllEvents() {
+
+    async groupAllEvents() {
       this.isGrouped = false;
       this.groupedCities = _.groupBy(this.events, function(event) {
         return event.details.venue.address.city;
@@ -117,20 +154,22 @@ export default {
       }
       this.cities.sort();
       this.dates.sort();
-
       this.isGrouped = true;
     },
     dynamicFlex() {
-      if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
+      if (this.sort.sort_id !== 1) {
+        return "12";
+      } else if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
         return "12";
       } else {
-        return "12";
+        return "9";
       }
     }
   },
   components: {
-    EventDetails
+    EventDetails,
     // eslint-disable-next-line vue/no-unused-components
+    Toc
   },
   props: {
     events: {
