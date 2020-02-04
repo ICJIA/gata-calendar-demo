@@ -27,7 +27,6 @@
     "rss-parser": "^3.7.4",
     "rss-to-json": "^1.0.5",
     "rssparser2": "git+https://github.com/whatcomtrans/node-rssparser2.git",
-    "url-slug": "^2.2.0",
     "vue": "^2.6.11",
     "vue-router": "^3.1.5",
     "vue2-google-maps": "^0.10.7",

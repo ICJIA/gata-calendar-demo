@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-unused-vars */
 let schedule = require("node-schedule");
 let Parser = require("rss-parser");

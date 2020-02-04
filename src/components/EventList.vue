@@ -33,7 +33,7 @@
               <h2
                 class="mb-5 tocHeadingList"
                 style="font-size: 28px; line-height: 1.2em;background: #2657A9; color:  #fff; padding: 10px; margin-top: 50px; "
-                :id="`city-${urlSlug(city)}`"
+                :id="`city-${city}`"
               >
                 {{ city }}
               </h2>
@@ -84,7 +84,7 @@
 import EventDetails from "@/components/EventDetails";
 import Toc from "@/components/Toc";
 import moment from "moment";
-import urlSlug from "url-slug";
+
 // eslint-disable-next-line no-unused-vars
 import _ from "lodash";
 export default {
@@ -107,7 +107,6 @@ export default {
   },
   data() {
     return {
-      urlSlug,
       groupedCities: null,
       groupedDates: null,
       dates: [],
