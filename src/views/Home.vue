@@ -21,29 +21,55 @@
                 <v-tabs-slider></v-tabs-slider>
 
                 <v-tab href="#tab-by-date">
-                  Events by Date
-                  <v-icon>calendar_today</v-icon>
+                  All Workshops
+
+                  <v-icon
+                    v-if="loading"
+                    left
+                    :disabled="loading"
+                    class="custom-loader"
+                    color="blue darken-4"
+                    >cached</v-icon
+                  >
+                  <v-icon v-else left>format_align_justify</v-icon>
                 </v-tab>
 
                 <v-tab :disabled="loading" href="#tab-map">
-                  Events by Location
-                  <v-icon>add_location</v-icon>
+                  Workshops by Location
+                  <v-icon
+                    v-if="loading"
+                    left
+                    :disabled="loading"
+                    class="custom-loader"
+                    color="blue darken-4"
+                    >cached</v-icon
+                  >
+                  <v-icon v-else left>add_location</v-icon>
                 </v-tab>
 
                 <v-tab :disabled="loading" href="#tab-full-list">
-                  All Events
-                  <v-icon class="material-icons">format_align_justify</v-icon>
+                  Workshops by Date
+                  <v-icon
+                    v-if="loading"
+                    left
+                    :disabled="loading"
+                    class="custom-loader"
+                    color="blue darken-4"
+                    >cached</v-icon
+                  >
+                  <v-icon v-else left>calendar_today</v-icon>
                 </v-tab>
               </v-tabs>
 
               <v-tabs-items v-model="tab">
                 <v-tab-item value="tab-by-date" :eager="true">
-                  <v-card flat>
-                    <EventCalendar
-                      :events="events"
-                      :loading="loading"
-                      :showTitle="false"
-                    ></EventCalendar>
+                  <v-card flat px-3>
+                    <v-card-text>
+                      <EventList
+                        :events="events"
+                        :loading="loading"
+                      ></EventList>
+                    </v-card-text>
                   </v-card>
                 </v-tab-item>
 
@@ -60,11 +86,12 @@
 
                 <v-tab-item value="tab-full-list" :eager="true">
                   <v-card flat>
-                    <v-card-text
-                      ><EventList
+                    <v-card-text>
+                      <EventCalendar
                         :events="events"
                         :loading="loading"
-                      ></EventList
+                        :showTitle="false"
+                      ></EventCalendar
                     ></v-card-text>
                   </v-card>
                 </v-tab-item>

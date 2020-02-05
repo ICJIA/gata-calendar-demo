@@ -26,7 +26,7 @@
     <div v-if="!displayInfo">
       <div class="text-center">
         <div class="py-3">
-          <h2 style="color: #444;" class="animated fadeInLeft">
+          <h2 style="color: #888; font-size: 14px;" class="animated fadeIn">
             Click marker for venue information.
           </h2>
         </div>

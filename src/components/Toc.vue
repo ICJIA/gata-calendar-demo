@@ -18,7 +18,7 @@
       class="mb-4 hover anchor"
       @click="$vuetify.goTo(0)"
     >
-      {{ tocHeading | upperCase }}
+      {{ `${tocHeading.toUpperCase()}` }}
     </div>
     <div class="divider">
       <ul class="toc-list">
@@ -66,7 +66,7 @@ export default {
       toc: []
     };
   },
-  async created() {
+  async mounted() {
     await this.setToc();
     var section = document.querySelectorAll("h2.tocHeadingList");
     if (section) {
@@ -77,32 +77,33 @@ export default {
       section.forEach(e => {
         sections[e.id] = e.offsetTop;
       });
+      console.log(sections);
 
       if (this.enableTracking) {
         window.onscroll = () => {
-          //   var scrollPosition =
-          //     document.documentElement.scrollTop || document.body.scrollTop;
-          //   const tocItems = document.querySelectorAll(".tocItem");
-          //   console.log(scrollPosition);
-          //   if (scrollPosition < 150) {
-          //     tocItems.forEach(toc => {
-          //       toc.classList.remove("visible");
-          //     });
-          //     this.$refs["anchor"].classList.add("visible");
-          //   } else {
-          //     this.$refs["anchor"].classList.remove("visible");
-          //   }
-          //console.log(scrollPosition);
-          //   for (i in sections) {
-          //     if (sections[i] <= scrollPosition) {
-          //       const sectionItem = document.getElementById(`scrollTo-${i}`);
-          //       console.log(i, sectionItem, sections[i]);
-          //       // tocItems.forEach(toc => {
-          //       //   toc.classList.remove("visible");
-          //       // });
-          //       // sectionItem.classList.add("visible");
-          //     }
-          //   }
+          var scrollPosition =
+            document.documentElement.scrollTop || document.body.scrollTop;
+          const tocItems = document.querySelectorAll(".tocItem");
+          console.log(scrollPosition);
+          if (scrollPosition < 150) {
+            tocItems.forEach(toc => {
+              toc.classList.remove("visible");
+            });
+            this.$refs["anchor"].classList.add("visible");
+          } else {
+            this.$refs["anchor"].classList.remove("visible");
+          }
+          console.log(scrollPosition);
+          for (i in sections) {
+            if (sections[i] <= scrollPosition) {
+              const sectionItem = document.getElementById(`scrollTo-${i}`);
+              console.log(i, sectionItem, sections[i]);
+              tocItems.forEach(toc => {
+                toc.classList.remove("visible");
+              });
+              sectionItem.classList.add("visible");
+            }
+          }
         };
       }
     }

@@ -7,10 +7,11 @@
       item-text="name"
       label="Sort By"
       filled
+      :disabled="loading"
       v-on:change="changeSort(`${sort.sort_id}`)"
     />
 
-    <div v-if="loading">LOADING</div>
+    <div v-if="loading"><EventLoader></EventLoader></div>
 
     <v-container style="margin: 0; padding: 0; width: 100%; ">
       <v-row>
@@ -67,13 +68,18 @@
         <v-col
           cols="12"
           sm="12"
-          md="3"
+          md="2"
           order-md="2"
           order="1"
           order-sm="1"
           v-if="sort.sort_id === 1"
         >
-          <Toc selector="#scrollArea" top="#baseContentTop" v-if="!loading" />
+          <Toc
+            selector="#scrollArea"
+            top="#baseContentTop"
+            v-if="!loading"
+            tocHeading="workshops"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -84,7 +90,7 @@
 import EventDetails from "@/components/EventDetails";
 import Toc from "@/components/Toc";
 import moment from "moment";
-
+import EventLoader from "@/components/EventLoader";
 // eslint-disable-next-line no-unused-vars
 import _ from "lodash";
 export default {
@@ -111,6 +117,7 @@ export default {
       groupedDates: null,
       dates: [],
       cities: [],
+
       sections: null,
       isGrouped: false,
       moment,
@@ -161,14 +168,15 @@ export default {
       } else if (this.$vuetify.breakpoint.xs || this.$vuetify.breakpoint.sm) {
         return "12";
       } else {
-        return "9";
+        return "10";
       }
     }
   },
   components: {
     EventDetails,
     // eslint-disable-next-line vue/no-unused-components
-    Toc
+    Toc,
+    EventLoader
   },
   props: {
     events: {
